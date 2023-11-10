@@ -10,7 +10,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.events.Attribute;
 
 import constants.AttributeConst;
 import constants.ForwardConst;
@@ -186,7 +185,7 @@ public abstract class ActionBase {
      * @param key パラメータ名
      * @param value パラメータの値
      */
-    protected <V> void putRequestScope(Attribute key, V value) {
+    protected <V> void putRequestScope(AttributeConst key, V value) {
         request.setAttribute(key.getValue(), value);
     }
 
