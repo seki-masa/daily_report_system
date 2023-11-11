@@ -68,11 +68,11 @@ public interface JpaConst {
     String Q_REP_GET_ALL = ENTITY_REP + ".getAll";
     String Q_REP_GET_ALL_DEF = "SELECT r FROM Report AS r ORDER BY r.id DESC";
     // 全ての日報の件数を取得する
-    String Q_REP_COUNT = ENTITY_REP + ".getAll";
-    String Q_REP_COUNT_DEF = "SELECT COUNT(r) FROM Reports AS r";
+    String Q_REP_COUNT = ENTITY_REP + ".count";
+    String Q_REP_COUNT_DEF = "SELECT COUNT(r) FROM Report AS r";
     // 指定した従業員が作成した日報を全件idの降順で取得する
     String Q_REP_GET_ALL_MINE = ENTITY_REP + ".getAllMine";
-    String Q_REP_GET_ALL_MINE_DEF = "SELECT r FROM Reports AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + "ORDER BY r,id DESC";
+    String Q_REP_GET_ALL_MINE_DEF = "SELECT r FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY r,id DESC";
     // 指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
