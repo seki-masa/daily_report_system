@@ -46,6 +46,10 @@ table, tr, th, td {
     border: 1px solid #cccccc;
 }
 
+h3 {
+    font-size: larger;
+}
+
 table {
     width: 100%;
     table-layout: fixed;
