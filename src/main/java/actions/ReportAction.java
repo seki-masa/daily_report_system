@@ -12,6 +12,8 @@ import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import models.ReportGood;
+import services.ReportGoodService;
 import services.ReportService;
 
 /**
@@ -21,6 +23,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private ReportGoodService gdService;
 
     /**
      * メソッドを実行する
@@ -29,6 +32,7 @@ public class ReportAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        gdService = new ReportGoodService();
 
         //メソッドを実行
         invoke();
@@ -151,12 +155,20 @@ public class ReportAction extends ActionBase {
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //ログイン中の従業員が取得した日報にいいねしているかを判別する
+        ReportGood rg = gdService.goodIdentify(rv, ev);
+
         if (rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
-
+            long goodCount = gdService.countAllGood(rv);
+            putRequestScope(AttributeConst.REPGOOD_COUNT, goodCount);
+            putRequestScope(AttributeConst.REPGOOD, rg); //いいねデータ
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
 
             //詳細画面を表示
@@ -234,6 +246,57 @@ public class ReportAction extends ActionBase {
 
             }
         }
+    }
+
+    public void good() throws ServletException, IOException {
+
+        // 日報IDをリクエストスコープから取得
+        String repId = getRequestParam(AttributeConst.REP_ID);
+
+        //idを条件に日報データを取得する
+        ReportView rv = service.findOne(toNumber(repId));
+
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        //ログイン中の従業員が取得した日報にいいねしているかを判別する
+        ReportGood rg = gdService.goodIdentify(rv, ev);
+
+        if(rg == null) {
+            // ログイン中の従業員が日報にいいねしていなかったら
+            // いいねされた日報データといいねした従業員データをいいねテーブルに保存する
+            gdService.create(rv, ev);
+
+        } else {
+            // ログイン中の従業員が日報にいいねしていたら
+            // いいねデータを削除
+            gdService.destroy(rg.getId());
+        }
+
+        // 日報詳細表示画面にリダイレクト
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_SHOW, repId);
+    }
+
+
+    public void goodShow() throws ServletException, IOException {
+        //idを条件に日報データを取得する
+        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        //指定されたページ数の一覧画面に表示するデータを取得
+        int page = getPage();
+
+        List<EmployeeView> employees = gdService.getAllGoodPerPage(rv, page);
+
+        //全ての従業員データの件数を取得
+        long goodCount = gdService.countAllGood(rv);
+
+        putRequestScope(AttributeConst.REPORT, rv);
+        putRequestScope(AttributeConst.EMPLOYEES, employees); //取得した従業員データ
+        putRequestScope(AttributeConst.REPGOOD_COUNT, goodCount); //全ての従業員データの件数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+        forward(ForwardConst.FW_REP_GOODSHOW);
     }
 
 

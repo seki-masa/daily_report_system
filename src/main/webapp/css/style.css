@@ -163,3 +163,22 @@ table#report_list .report_action {
 pre {
     font-family: "Hiragino Kaku Gothic Pro",Meiryo,"MS PGothic",Helvetica,Arial,sans-serif;
 }
+
+.remove-container {
+    margin: 15px 0px;
+}
+
+.good-remove {
+    color: #ffdab9;
+    position: absolute;
+}
+
+.good {
+    color: #24738e;
+    position: absolute;
+}
+
+.icon-box {
+    display: inline;
+}
+

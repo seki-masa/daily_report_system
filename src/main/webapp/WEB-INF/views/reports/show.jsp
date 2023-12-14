@@ -6,6 +6,8 @@
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commGd" value="${ForwardConst.CMD_GOOD.getValue() }" />
+<c:set var="commGdShow" value="${ForwardConst.CMD_GOODSHOW.getValue()}"/>
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -45,7 +47,27 @@
                 <a href="<c:url value='?action=${actRep}&command=${commEdt}&id=${report.id}' />">この日報を編集する</a>
             </p>
         </c:if>
-
+        <c:choose>
+            <c:when test="${sessionScope.login_employee.id != report.employee.id && report_good == null}">
+                <p>
+                    <a href="<c:url value='?action=${actRep}&command=${commGd}&id=${report.id}' />">いいねする<i class="good bi bi-hand-thumbs-up"></i></a>
+                    &nbsp;
+                </p>
+            </c:when>
+            <c:when test="${sessionScope.login_employee.id != report.employee.id && report_good != null}">
+                <div class="remove-container">
+                    <a href="<c:url value='?action=${actRep}&command=${commGd}&id=${report.id}' />">いいねを取り消す
+                        <div class="icon-box">
+                            <i class="good-remove bi bi-hand-thumbs-up-fill"></i>
+                            <i class="good bi bi-hand-thumbs-up"></i>
+                        </div>
+                    </a>
+                </div>
+            </c:when>
+        </c:choose>
+        <p>
+            <a href="<c:url value='?action=${actRep}&command=${commGdShow}&id=${report.id}' />">${report_good_count}件のいいね</a>
+        </p>
         <p>
             <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a>
         </p>

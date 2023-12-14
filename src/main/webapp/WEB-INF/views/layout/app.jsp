@@ -19,6 +19,8 @@
 <title><c:out value="日報管理システム" /></title>
 <link rel="stylesheet" href="<c:url value='/css/reset.css' />">
 <link rel="stylesheet" href="<c:url value='/css/style.css' />">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 </head>
 <body>
     <div id="wrapper">

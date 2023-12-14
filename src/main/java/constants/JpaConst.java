@@ -41,14 +41,23 @@ public interface JpaConst {
     String REP_COL_CREATED_AT = "created_at"; // 登録日時
     String REP_COL_UPDATED_AT = "updated_at"; // 更新日時
 
+    // いいねの中間テーブル
+    String TABLE_REPGOOD = "report_good"; //テーブル名
+    // いいねの中間テーブルカラム
+    String REPGOOD_COL_ID = "id";
+    String REPGOOD_COL_EMP ="employee_id";
+    String REPGOOD_COL_REP = "report_id";
+
     // Entity名
     String ENTITY_EMP = "employee"; // 従業員
     String ENTITY_REP = "report"; // 日報
+    String ENTITY_REPGOOD = "reportGood"; // いいね機能
 
     // JPQL内のパラメータ
     String JPQL_PARM_CODE = "code"; // 社員番号
     String JPQL_PARM_PASSWORD = "password"; // パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; // 従業員
+    String JPQL_PARM_REPORT = "report"; // 日報
 
     // NamedQueryの nameとQuery
     // 全ての従業員をidの降順に取得する
@@ -77,6 +86,15 @@ public interface JpaConst {
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
 
+    // 指定した日報にいいねした全ての従業員を取得する
+    String Q_REPGOOD_GET_ALL = ENTITY_REPGOOD + ".getAll";
+    String Q_REPGOOD_GET_ALL_DEF = "SELECT rg FROM ReportGood AS rg WHERE rg.report = :" + JPQL_PARM_REPORT + " ORDER BY rg.id DESC";
+    // 指定した日報にいいねした全ての従業員の件数を取得する
+    String Q_REPGOOD_COUNT = ENTITY_REPGOOD + ".count";
+    String Q_REPGOOD_COUNT_DEF = "SELECT COUNT(rg) FROM ReportGood AS rg WHERE rg.report = :" + JPQL_PARM_REPORT;
+    // 指定した従業員が指定した日報に行ったいいね情報を取得する
+    String Q_REPGOOD_GET_BY_REP_AND_EMP = ENTITY_REPGOOD + ".getByRepAndEmp";
+    String Q_REPGOOD_GET_BY_REP_AND_EMP_DEF = "SELECT rg FROM ReportGood AS rg WHERE rg.report = :" + JPQL_PARM_REPORT + " AND rg.employee = :" + JPQL_PARM_EMPLOYEE;
 
 
 
